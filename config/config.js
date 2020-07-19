@@ -296,7 +296,16 @@ export default defineConfig({
   // @ts-ignore
   title: false,
   ignoreMomentLocale: true,
-  proxy: proxy[REACT_APP_ENV || 'dev'],
+  // proxy: proxy[REACT_APP_ENV || 'dev'],
+  proxy: {
+    '/api': {
+      target: 'http://localhost:8099/kj/',
+      changeOrigin: true,
+      pathRewrite: {
+        '^/api': '/',
+      },
+    },
+  },
   manifest: {
     basePath: '/',
   },
