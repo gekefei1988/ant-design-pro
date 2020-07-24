@@ -1,7 +1,10 @@
 import request from 'umi-request';
 
 export async function fakeAccountLogin(params) {
-  return request('/api2/login/account', {
+  return request('/api2/login', {
+    // headers: {
+    //   'Content-Type': 'application/json;charset=utf-8',
+    // },
     method: 'POST',
     data: params,
   });

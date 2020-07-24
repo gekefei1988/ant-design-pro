@@ -1,5 +1,5 @@
 import { Alert } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'umi';
 import styles from './style.less';
 import LoginFrom from './components/Login';
@@ -20,19 +20,24 @@ const LoginMessage = ({ content }) => (
 const Login = (props) => {
   const { userAndlogin = {}, submitting } = props;
   const { status } = userAndlogin;
+  const [type, setType] = useState('account');
 
   const handleSubmit = (values) => {
     const { dispatch } = props;
     dispatch({
       type: 'userAndlogin/login',
-      payload: { ...values },
+      payload: { ...values, type },
     });
   };
 
   return (
     <div className={styles.main}>
-      <LoginFrom onSubmit={handleSubmit}>
-        {status === 'error' && !submitting && <LoginMessage content="{msg}" />}
+      <LoginFrom activeKey={type} onTabChange={setType} onSubmit={handleSubmit}>
+        {status === 'error' && !submitting && (
+          <LoginMessage content="账户或密码错误（admin/ant.design）" />
+        )}
+        {status === 'noAuth' && !submitting && <LoginMessage content="没有权限" />}
+
         <UserName
           name="userName"
           placeholder="用户名: admin or user"
