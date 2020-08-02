@@ -1,7 +1,7 @@
 import { history } from 'umi';
 import { message } from 'antd';
 import { parse } from 'qs';
-import { fakeAccountLogin, getFakeCaptcha } from './service';
+import { fakeAccountLogin, getFakeCaptcha, fakeAccountLogout } from './service';
 
 export function getPageQuery() {
   return parse(window.location.href.split('?')[1]);
@@ -58,7 +58,12 @@ const Model = {
         history.replace(redirect || '/');
       }
     },
-
+    *logout(_, { call }) {
+      yield call(fakeAccountLogout);
+      // history.replace({
+      //   pathname: '/user/login',
+      // });
+    },
     *getCaptcha({ payload }, { call }) {
       yield call(getFakeCaptcha, payload);
     },

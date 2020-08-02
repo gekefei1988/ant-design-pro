@@ -9,6 +9,9 @@ export async function fakeAccountLogin(params) {
     data: params,
   });
 }
+export async function fakeAccountLogout() {
+  return request('/api2/captcha');
+}
 export async function getFakeCaptcha(mobile) {
   return request(`/api/login/captcha?mobile=${mobile}`);
 }
