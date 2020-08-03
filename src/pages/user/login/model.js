@@ -60,9 +60,9 @@ const Model = {
     },
     *logout(_, { call }) {
       yield call(fakeAccountLogout);
-      // history.replace({
-      //   pathname: '/user/login',
-      // });
+      history.replace({
+        pathname: '/user/login',
+      });
     },
     *getCaptcha({ payload }, { call }) {
       yield call(getFakeCaptcha, payload);
