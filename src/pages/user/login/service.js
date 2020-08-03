@@ -1,4 +1,4 @@
-import request from 'umi-request';
+import request from '@/utils/request';
 
 export async function fakeAccountLogin(params) {
   return request('/api2/login', {
@@ -10,7 +10,7 @@ export async function fakeAccountLogin(params) {
   });
 }
 export async function fakeAccountLogout() {
-  return request('/api2/captcha');
+  return request('/api2/logout');
 }
 export async function getFakeCaptcha(mobile) {
   return request(`/api/login/captcha?mobile=${mobile}`);
