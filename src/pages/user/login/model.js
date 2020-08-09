@@ -2,6 +2,7 @@ import { history } from 'umi';
 import { message } from 'antd';
 import { parse } from 'qs';
 import { fakeAccountLogin, getFakeCaptcha, fakeAccountLogout } from './service';
+import { routerRedux } from 'dva/router';
 
 export function getPageQuery() {
   return parse(window.location.href.split('?')[1]);
@@ -36,26 +37,27 @@ const Model = {
 
       if (response.status === 'ok') {
         message.success('登录成功！');
-        const urlParams = new URL(window.location.href);
-        const params = getPageQuery();
-        let { redirect } = params;
+        yield put(routerRedux.push('/dashboard/analysis'));
+        // const urlParams = new URL(window.location.href);
+        // const params = getPageQuery();
+        // let { redirect } = params;
 
-        if (redirect) {
-          const redirectUrlParams = new URL(redirect);
+        // if (redirect) {
+        //   const redirectUrlParams = new URL(redirect);
 
-          if (redirectUrlParams.origin === urlParams.origin) {
-            redirect = redirect.substr(urlParams.origin.length);
+        //   if (redirectUrlParams.origin === urlParams.origin) {
+        //     redirect = redirect.substr(urlParams.origin.length);
 
-            if (redirect.match(/^\/.*#/)) {
-              redirect = redirect.substr(redirect.indexOf('#') + 1);
-            }
-          } else {
-            window.location.href = redirect;
-            return;
-          }
-        }
+        //     if (redirect.match(/^\/.*#/)) {
+        //       redirect = redirect.substr(redirect.indexOf('#') + 1);
+        //     }
+        //   } else {
+        //     window.location.href = redirect;
+        //     return;
+        //   }
+        // }
 
-        history.replace(redirect || '/');
+        // history.replace(redirect || '/');
       }
     },
     *logout(_, { call }) {
