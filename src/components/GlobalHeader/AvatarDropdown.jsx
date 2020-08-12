@@ -14,7 +14,7 @@ class AvatarDropdown extends React.Component {
 
       if (dispatch) {
         dispatch({
-          type: 'userAndlogin/logout',
+          type: 'login/logout',
         });
       }
 

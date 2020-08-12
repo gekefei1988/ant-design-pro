@@ -26,7 +26,7 @@ export default defineConfig({
   routes: [
     {
       path: '/',
-      component: '../layouts/SecurityLayout',
+      component: '../layouts/BlankLayout',
       routes: [
         {
           path: '/user',
@@ -68,7 +68,6 @@ export default defineConfig({
             {
               path: '/',
               redirect: '/user/login',
-              //redirect: '/dashboard/analysis',
             },
             {
               path: '/dashboard',
@@ -297,16 +296,7 @@ export default defineConfig({
   // @ts-ignore
   title: false,
   ignoreMomentLocale: true,
-  //proxy: proxy[REACT_APP_ENV || 'dev'],
-  proxy: {
-    '/api': {
-      target: 'http://localhost:8099/kj/',
-      changeOrigin: true,
-      pathRewrite: {
-        '^/api': '/',
-      },
-    },
-  },
+  proxy: proxy[REACT_APP_ENV || 'dev'],
   manifest: {
     basePath: '/',
   },
