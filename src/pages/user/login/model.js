@@ -1,6 +1,7 @@
-import { history } from 'umi';
+// import { history } from 'umi';
 import { message } from 'antd';
 import { parse } from 'qs';
+import { routerRedux } from 'dva/router';
 import { fakeAccountLogin, getFakeCaptcha } from './service';
 
 export function getPageQuery() {
@@ -29,7 +30,7 @@ const Model = {
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(fakeAccountLogin, payload);
-      // response.currentAuthority = 'guest';
+      response.currentAuthority = 'admin';
       yield put({
         type: 'changeLoginStatus',
         payload: response,
@@ -55,8 +56,8 @@ const Model = {
             return;
           }
         }
-
-        history.replace(redirect || '/');
+        yield put(routerRedux.replace(redirect || '/'));
+        // history.replace(redirect || '/');
       }
     },
 

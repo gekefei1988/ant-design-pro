@@ -26,7 +26,7 @@ export default defineConfig({
   routes: [
     {
       path: '/',
-      component: '../layouts/BlankLayout',
+      component: '../layouts/SecurityLayout',
       routes: [
         {
           path: '/user',
