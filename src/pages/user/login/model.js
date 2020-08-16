@@ -1,15 +1,19 @@
-// import { history } from 'umi';
+import { stringify } from 'querystring';
+import { history } from 'umi';
 import { message } from 'antd';
 import { parse } from 'qs';
-import { routerRedux } from 'dva/router';
-import { fakeAccountLogin, getFakeCaptcha } from './service';
+// import { routerRedux } from 'dva/router';
+import { fakeAccountLogin, getFakeCaptcha, logout} from './service';
 
 export function getPageQuery() {
   return parse(window.location.href.split('?')[1]);
 }
-export function setAuthority(authority) {
+export function setAuthority(payload) {
+  const authority = payload.currentAuthority;
+  const {token} = payload;
   const proAuthority = typeof authority === 'string' ? [authority] : authority;
   localStorage.setItem('antd-pro-authority', JSON.stringify(proAuthority)); // hard code
+  localStorage.setItem('token', token);
   // reload Authorized component
 
   try {
@@ -30,7 +34,7 @@ const Model = {
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(fakeAccountLogin, payload);
-      response.currentAuthority = 'admin';
+      // response.currentAuthority = 'admin';
       yield put({
         type: 'changeLoginStatus',
         payload: response,
@@ -56,9 +60,29 @@ const Model = {
             return;
           }
         }
-        yield put(routerRedux.replace(redirect || '/'));
+        // yield put(routerRedux.replace(redirect || '/'));
         // history.replace(redirect || '/');
+        window.location.href=redirect || '/';
       }
+    },
+    *logout(_, { call }) {
+      // const { redirect } = getPageQuery(); // Note: There may be security issues, please note
+      yield call(logout);
+
+      history.replace({
+        pathname: '/user/login',
+        search: stringify({
+          redirect: window.location.href,
+        }),
+      });
+      // if (window.location.pathname !== '/user/login' && !redirect) {
+      //   history.replace({
+      //     pathname: '/user/login',
+      //     search: stringify({
+      //       redirect: window.location.href,
+      //     }),
+      //   });
+      // }
     },
 
     *getCaptcha({ payload }, { call }) {
@@ -67,7 +91,8 @@ const Model = {
   },
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority);
+      // setAuthority(payload.currentAuthority);
+      setAuthority(payload);
       return { ...state, status: payload.status, msg: payload.msg };
     },
   },

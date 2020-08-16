@@ -14,7 +14,7 @@ class AvatarDropdown extends React.Component {
 
       if (dispatch) {
         dispatch({
-          type: 'login/logout',
+          type: 'userAndlogin/logout',
         });
       }
 
@@ -54,11 +54,11 @@ class AvatarDropdown extends React.Component {
         </Menu.Item>
       </Menu>
     );
-    return currentUser && currentUser.name ? (
+    return currentUser && currentUser.userName ? (
       <HeaderDropdown overlay={menuHeaderDropdown}>
         <span className={`${styles.action} ${styles.account}`}>
           <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
-          <span className={styles.name}>{currentUser.name}</span>
+          <span className={styles.name}>{currentUser.userName}</span> 
         </span>
       </HeaderDropdown>
     ) : (

@@ -54,4 +54,16 @@ const request = extend({
   // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
 });
+
+request.interceptors.request.use(async (url, options) => {  // 此处为拦截器，每次发送请求之前判断能否取到token
+  if (localStorage.getItem('token')) {
+    const headers = {
+      'auth-token': `${localStorage.getItem('token')}`,
+    };
+    return {
+      url,
+      options: { ...options, headers },
+    };
+  }
+});
 export default request;
