@@ -3,19 +3,20 @@ import { history } from 'umi';
 import { message } from 'antd';
 import { parse } from 'qs';
 // import { routerRedux } from 'dva/router';
-import { fakeAccountLogin, getFakeCaptcha, logout} from './service';
+// import { reloadAuthorized } from '@/utils/Authorized';
+import { fakeAccountLogin, getFakeCaptcha, logout } from './service';
 
 export function getPageQuery() {
   return parse(window.location.href.split('?')[1]);
 }
 export function setAuthority(payload) {
   const authority = payload.currentAuthority;
-  const {token} = payload;
+  const { token } = payload;
   const proAuthority = typeof authority === 'string' ? [authority] : authority;
   localStorage.setItem('antd-pro-authority', JSON.stringify(proAuthority)); // hard code
   localStorage.setItem('token', token);
   // reload Authorized component
-
+  // reloadAuthorized();
   try {
     if (window.reloadAuthorized) {
       window.reloadAuthorized();
@@ -34,7 +35,7 @@ const Model = {
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(fakeAccountLogin, payload);
-      // response.currentAuthority = 'admin';
+      response.currentAuthority = 'user';
       yield put({
         type: 'changeLoginStatus',
         payload: response,
@@ -42,6 +43,7 @@ const Model = {
 
       if (response.status === 'ok') {
         message.success('登录成功！');
+        // reloadAuthorized();
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params;
@@ -61,8 +63,8 @@ const Model = {
           }
         }
         // yield put(routerRedux.replace(redirect || '/'));
-        // history.replace(redirect || '/');
-        window.location.href=redirect || '/';
+        history.replace(redirect || '/');
+        // window.location.href=redirect || '/';
       }
     },
     *logout(_, { call }) {
