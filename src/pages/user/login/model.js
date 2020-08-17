@@ -12,9 +12,11 @@ export function getPageQuery() {
 export function setAuthority(payload) {
   const authority = payload.currentAuthority;
   const { token } = payload;
+  const { currentUser } = payload;
   const proAuthority = typeof authority === 'string' ? [authority] : authority;
   localStorage.setItem('antd-pro-authority', JSON.stringify(proAuthority)); // hard code
   localStorage.setItem('token', token);
+  localStorage.setItem('currentUser', JSON.stringify(currentUser));
   // reload Authorized component
   // reloadAuthorized();
   try {
@@ -70,7 +72,7 @@ const Model = {
     *logout(_, { call }) {
       // const { redirect } = getPageQuery(); // Note: There may be security issues, please note
       yield call(logout);
-
+      localStorage.setItem('currentUser', '');
       history.replace({
         pathname: '/user/login',
         search: stringify({
