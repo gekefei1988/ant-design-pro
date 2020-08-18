@@ -68,7 +68,6 @@ export default defineConfig({
             {
               path: '/',
               redirect: '/dashboard/analysis',
-              authority: ['admin'],
             },
             {
               path: '/dashboard',
